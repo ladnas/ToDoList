@@ -9,7 +9,7 @@ struct ToDoItem {
     ToDoItem* next; // Linked List item dalam grup
 };
 
-// tes
+// testing 
 // Struct Grup To-Do lisnya 
 struct ToDoGroup {
     string groupName;
