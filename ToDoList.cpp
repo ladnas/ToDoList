@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+
 using namespace std;
 
 // Struct tugas di dalem grup nanti 
@@ -19,33 +20,32 @@ struct ToDoGroup {
     ToDoGroup* next;    // Linked List antar grup
 };
 
-// Intinya, 2 struct diatas nanti hasil outputnya bakal keliatan kayak gini:
+// ======================= CEK BENTUK OUTPUT DI PALING BAWAH ===========================
 
-/* List hari ini: tgl 17 juli 2025: <-- ini string di dalem grup ToDoGroup "List hari ini" groupName. "tgl 17 juli 2025" groupDate
-    [ ] Ngasih makan ikan 
-    [ ] Belajar
-    [ ] Ngerjain tugas
-    [ ] Tidur
-
-    [ ] <-- kotak ini pake bool done (bool done di dalem struct ToDoItem) atau artinya pake true false buat nanti user bisa ngechecklist kalo tugas ini kelar
-            klo semisal user nge-done tugas ini, nanti ouputnya [v] Ngasih makan ikan
-
-    Ngasih makan ikan <-- ini string task di dalem struct ToDoItem
-
-    Jadi disini ada 2 linked list, linked list buat grup dan nanti di dalem grup dikasih linked list tugas. Mangkanya ada 2 struct, 
-*/
 
 // Head dari linked list grup
 ToDoGroup* headGroup = nullptr;
+ToDoGroup* currentNode = nullptr;
 
 // ===================== FUNGSI-FUNGSI ==========================
-
+bool isEmpty() {
+    return (headGroup == NULL);
+}
 // Tambahkan grup baru ke daftar
 void addGroup(string name, string date) {
-    // Buat node grup baru
-    // Tambahkan ke linked list grup
+    ToDoGroup *newNode = new ToDoGroup;
+    newNode->groupName = name;
+    newNode->groupDate = date;
+    newNode->next = NULL;
 
-    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
+    if (isEmpty()) {
+        headGroup = newNode;
+    } else {
+        currentNode->next = newNode;
+    }
+    currentNode = newNode;
+
+    cout << "Nama group berhasil ditambahkan\n\n";
 }
 
 // Tambahkan to-do item ke grup tertentu
@@ -110,11 +110,53 @@ ToDoGroup* searchGroup(string name) {
 // =============================================================
 
 int main() {
-    // Menu utama akan dibuat di sini
-    // Panggil fungsi-fungsi di atas sesuai pilihan user
+    int pilihanMenu;
+    string Name, date;
 
-    // ini paling gampang, cuman ngeoutputin doang
+    do {
+        system("cls");
+        cout << "==============================================\n";
+        cout << "Menu To do list anda\n";
+        cout << "==============================================\n";
+        cout << "1. Menambah To Do List baru\n";
+        cout << "==============================================";
+        cout << "\nMasukkan pilihan anda : ";
+        cin >> pilihanMenu;
+        cout << endl;
 
+        switch (pilihanMenu) {
+            case 1:
+                cout << "Masukkan Judul to do list anda hari ini : "; cin >> Name;
+                cout << "Masukkan Judul to do list anda hari ini : "; cin >> date;
+                addGroup(Name, date);
+                break;
+            case 2:
+                break;
+
+            default:
+                cout << "Menu yang dipilih tidak terdaftar\n\n";
+                break;
+        }
+
+        system("pause"); 
+    } while (pilihanMenu != 2);
     return 0;
 }
-// Hello World
+// FOLLOW MY GITHUB : Roxcys116
+// FOLLOW MY TIKTOK : Roxcys
+
+// Intinya, 2 struct diatas nanti hasil outputnya bakal keliatan kayak gini:
+
+/* List hari ini: tgl 17 juli 2025: <-- ini string di dalem grup ToDoGroup "List hari ini" groupName. "tgl 17 juli 2025" groupDate
+    [ ] Ngasih makan ikan 
+    [ ] Belajar
+    [ ] Ngerjain tugas
+    [ ] Tidur
+
+    [ ] <-- kotak ini pake bool done (bool done di dalem struct ToDoItem) atau artinya pake true false buat nanti user bisa ngechecklist kalo tugas ini kelar
+            klo semisal user nge-done tugas ini, nanti ouputnya [v] Ngasih makan ikan
+
+    Ngasih makan ikan <-- ini string task di dalem struct ToDoItem
+
+    Jadi disini ada 2 linked list, linked list buat grup dan nanti di dalem grup dikasih linked list tugas. Mangkanya ada 2 struct, 
+*/
