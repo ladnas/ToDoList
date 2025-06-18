@@ -126,8 +126,8 @@ int main() {
 
         switch (pilihanMenu) {
             case 1:
-                cout << "Masukkan Judul to do list anda hari ini : "; cin >> Name;
-                cout << "Masukkan Judul to do list anda hari ini : "; cin >> date;
+                cout << "Masukkan Judul to do list anda : "; cin >> Name;
+                cout << "Masukkan Hari dan tanggal pada to do list anda : "; cin >> date;
                 addGroup(Name, date);
                 break;
             case 2:
