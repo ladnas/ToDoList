@@ -77,31 +77,31 @@ void deleteItem(string groupName, string task) {
     ToDoGroup* group = headGroup;
 
     // Cari grup
-    while (group != nullptr && group->groupName != groupName) {
+    while (group != NULL && group->groupName != groupName) {
         group = group->next;
     }
 
-    if (group == nullptr) {
+    if (group == NULL) {
         cout << "Grup tidak ditemukan.\n";
         return;
     }
 
     ToDoItem* current = group->headItem;
-    ToDoItem* previous = nullptr;
+    ToDoItem* previous = NULL;
 
     // Cari item
-    while (current != nullptr && current->task != task) {
+    while (current != NULL && current->task != task) {
         previous = current;
         current = current->next;
     }
 
-    if (current == nullptr) {
+    if (current == NULL) {
         cout << "Item tidak ditemukan dalam grup.\n";
         return;
     }
 
     // Hapus item
-    if (previous == nullptr) {
+    if (previous == NULL) {
         // Item pertama
         group->headItem = current->next;
     } else {
