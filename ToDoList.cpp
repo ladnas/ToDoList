@@ -56,6 +56,7 @@ void addToDoItem(string groupName, string task) {
     // Tambahkan item ke linked list item pada grup
 
     // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
+    
 }
 
 // Hapus seluruh grup beserta semua list di dalamnya
@@ -69,11 +70,6 @@ void deleteGroup(string groupName) {
 
 // Hapus satu item dalam grup
 void deleteItem(string groupName, string task) {
-    // Cari grup
-    // Cari item berdasarkan nama
-    // Hapus item dari linked list
-
-    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
     ToDoGroup* group = headGroup;
 
     // Cari grup
@@ -110,7 +106,11 @@ void deleteItem(string groupName, string task) {
 
     delete current;
     cout << "Item \"" << task << "\" berhasil dihapus dari grup \"" << groupName << "\".\n";
+    // Cari grup
+    // Cari item berdasarkan nama
+    // Hapus item dari linked list
 
+    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
 
 }
 
