@@ -74,6 +74,44 @@ void deleteItem(string groupName, string task) {
     // Hapus item dari linked list
 
     // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
+    ToDoGroup* group = headGroup;
+
+    // Cari grup
+    while (group != nullptr && group->groupName != groupName) {
+        group = group->next;
+    }
+
+    if (group == nullptr) {
+        cout << "Grup tidak ditemukan.\n";
+        return;
+    }
+
+    ToDoItem* current = group->headItem;
+    ToDoItem* previous = nullptr;
+
+    // Cari item
+    while (current != nullptr && current->task != task) {
+        previous = current;
+        current = current->next;
+    }
+
+    if (current == nullptr) {
+        cout << "Item tidak ditemukan dalam grup.\n";
+        return;
+    }
+
+    // Hapus item
+    if (previous == nullptr) {
+        // Item pertama
+        group->headItem = current->next;
+    } else {
+        previous->next = current->next;
+    }
+
+    delete current;
+    cout << "Item \"" << task << "\" berhasil dihapus dari grup \"" << groupName << "\".\n";
+
+
 }
 
 // Checklist tugas
@@ -144,8 +182,7 @@ int main() {
     } while (pilihanMenu != 2);
     return 0;
 }
-// FOLLOW MY GITHUB : Roxcys116
-// FOLLOW MY TIKTOK : Roxcys
+
 
 // Intinya, 2 struct diatas nanti hasil outputnya bakal keliatan kayak gini:
 
