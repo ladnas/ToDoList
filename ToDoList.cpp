@@ -268,7 +268,7 @@ int main() {
         cout << "5. Urutkan Tugas dalam Grup\n";
         cout << "6. Hapus Tugas dari Grup\n";
         cout << "7. Hapus Grup\n";
-        cout << "0. Keluar\n";
+        cout << "8. Keluar\n";
         cout << "\n====================================\n";
         cout << "Pilih menu: ";
         cin >> pilihan;
@@ -316,7 +316,7 @@ int main() {
                 cout << "Nama grup yang ingin dihapus: "; getline(cin, namaGrup);
                 hapusGrup(namaGrup);
                 break;
-            case 0:
+            case 8:
                 cout << "Keluar...\n";
                 break;
             default:
