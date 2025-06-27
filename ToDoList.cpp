@@ -1,201 +1,332 @@
 #include <iostream>
 #include <string>
-#include <cstdlib>
 #include <stdlib.h>
-
 using namespace std;
 
-// Struct tugas di dalem grup nanti 
-struct ToDoItem {
-    string task;
-    bool done;
-    ToDoItem* next; // Linked List item dalam grup
+
+struct Tugas {
+    string namaTugas;
+    bool selesai;
+    Tugas* next;
 };
 
-// tes
-
-// Struct Grup To-Do listnya 
-struct ToDoGroup {
-    string groupName;
-    string groupDate;
-    ToDoItem* headItem; // Pointer ke linked list item
-    ToDoGroup* next;    // Linked List antar grup
+struct Grup {
+    string namaGrup;
+    string tanggal;
+    Tugas* head;
+    Grup* next;
 };
 
-// ======================= CEK BENTUK OUTPUT DI PALING BAWAH ===========================
+
+Grup* headGroup = NULL;
+Grup* queueArray[100];
+int front = -1, back = -1;
 
 
-// Head dari linked list grup
-ToDoGroup* headGroup = nullptr;
-ToDoGroup* currentNode = nullptr;
+bool isQueueEmpty() {
+    return front == -1;
+}
 
-// ===================== FUNGSI-FUNGSI ==========================
+void enqueue(Grup* newGroup) {
+    if (back == 99) return;
+    if (isQueueEmpty()) front = 0;
+    queueArray[++back] = newGroup;
+}
+
+Grup* dequeue() {
+    if (isQueueEmpty()) return NULL;
+    Grup* result = queueArray[front++];
+    if (front > back) front = back = -1;
+    return result;
+}
+
+
 bool isEmpty() {
-    return (headGroup == NULL);
+    return headGroup == NULL;
 }
-// Tambahkan grup baru ke daftar
-void addGroup(string name, string date) {
-    ToDoGroup *newNode = new ToDoGroup;
-    newNode->groupName = name;
-    newNode->groupDate = date;
-    newNode->next = NULL;
 
-    if (isEmpty()) {
-        headGroup = newNode;
-    } else {
-        currentNode->next = newNode;
+Grup* cariGrup(string nama) {
+    Grup* current = headGroup;
+    while (current != NULL) {
+        if (current->namaGrup == nama)
+            return current;
+        current = current->next;
     }
-    currentNode = newNode;
-
-    cout << "Nama group berhasil ditambahkan\n\n";
+    return NULL;
 }
 
-// Tambahkan to-do item ke grup tertentu
-void addToDoItem(string groupName, string task) {
-    // Cari grup dengan nama tertentu
-    // Tambahkan item ke linked list item pada grup
-
-    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
-    
-}
-
-// Hapus seluruh grup beserta semua list di dalamnya
-void deleteGroup(string groupName) {
-    // Cari grup
-    // Hapus semua item dalam grup
-    // Hapus grup dari linked list grup
-
-    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
-}
-
-// Hapus satu item dalam grup
-void deleteItem(string groupName, string task) {
-    ToDoGroup* group = headGroup;
-
-    // Cari grup
-    while (group != NULL && group->groupName != groupName) {
-        group = group->next;
+void tampilkanDaftarGrup() {
+    Grup* current = headGroup;
+    cout << "\nDaftar Grup Yang Ada:\n";
+    while (current != NULL) {
+        cout << "- " << current->namaGrup << endl;
+        current = current->next;
     }
+    cout << endl;
+}
 
-    if (group == NULL) {
-        cout << "Grup tidak ditemukan.\n";
-        return;
+void tampilkanDaftarTugasDalamGrup(string namaGrup) {
+    Grup* grup = cariGrup(namaGrup);
+    if (!grup) return;
+
+    cout << "\nTugas di dalam grup '" << namaGrup << "':\n";
+    Tugas* tugas = grup->head;
+    while (tugas != NULL) {
+        cout << (tugas->selesai ? "[v] " : "[ ] ") << tugas->namaTugas << endl;
+        tugas = tugas->next;
     }
+}
 
-    ToDoItem* current = group->headItem;
-    ToDoItem* previous = NULL;
+void hapusSemuaTugas(Tugas* head) {
+    while (head != NULL) {
+        Tugas* temp = head;
+        head = head->next;
+        delete temp;
+    }
+}
 
-    // Cari item
-    while (current != NULL && current->task != task) {
+void hapusGrup(string namaGrup) {
+    Grup* current = headGroup;
+    Grup* previous = NULL;
+
+    while (current != NULL && current->namaGrup != namaGrup) {
         previous = current;
         current = current->next;
     }
 
     if (current == NULL) {
-        cout << "Item tidak ditemukan dalam grup.\n";
+        cout << "Grup tidak ditemukan.\n";
         return;
     }
 
-    // Hapus item
+    hapusSemuaTugas(current->head);
+
     if (previous == NULL) {
-        // Item pertama
-        group->headItem = current->next;
+        headGroup = current->next;
     } else {
         previous->next = current->next;
     }
 
     delete current;
-    cout << "Item \"" << task << "\" berhasil dihapus dari grup \"" << groupName << "\".\n";
-    // Cari grup
-    // Cari item berdasarkan nama
-    // Hapus item dari linked list
-
-    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
-
+    cout << "Grup \"" << namaGrup << "\" berhasil dihapus.\n";
 }
 
-// Checklist tugas
-void checkItem(string groupName, string task) {
-    // Cari grup dan item
-    // Ubah status 'done' jadi true
+void hapusTugas(string namaGrup, string namaTugas) {
+    Grup* grup = cariGrup(namaGrup);
+    if (grup == NULL) {
+        cout << "Grup tidak ditemukan.\n";
+        return;
+    }
 
-    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
+    Tugas* current = grup->head;
+    Tugas* previous = NULL;
+
+    while (current != NULL && current->namaTugas != namaTugas) {
+        previous = current;
+        current = current->next;
+    }
+
+    if (current == NULL) {
+        cout << "Tugas tidak ditemukan.\n";
+        return;
+    }
+
+    if (previous == NULL) {
+        grup->head = current->next;
+    } else {
+        previous->next = current->next;
+    }
+
+    delete current;
+    cout << "Tugas \"" << namaTugas << "\" berhasil dihapus dari grup \"" << namaGrup << "\".\n";
 }
 
-// Tampilkan seluruh grup dan to-do list-nya
-void displayAll() {
-    // Looping seluruh grup
-    // Looping seluruh item dalam grup
-    // Tampilkan status checklist
+void tambahGrup(string nama, string tanggal) {
+    Grup* baru = new Grup;
+    baru->namaGrup = nama;
+    baru->tanggal = tanggal;
+    baru->head = NULL;
+    baru->next = NULL;
 
-    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
+    if (isEmpty()) {
+        headGroup = baru;
+    } else {
+        Grup* temp = headGroup;
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = baru;
+    }
+    enqueue(baru);
+    cout << "\nGrup berhasil ditambahkan.\n";
 }
 
-// Urutkan to-do list dalam grup berdasarkan abjad
-void sortItems(string groupName) {
-    // Gunakan bubble sort atau lainnya
-    // Urutkan berdasarkan nama task
+void tambahTugas(string namaGrup, string namaTugas) {
+    Grup* grup = cariGrup(namaGrup);
+    if (grup == NULL) {
+        cout << "Grup tidak ditemukan.\n";
+        return;
+    }
+    char tambahLagi;
+    do {
+        string namaTugas;
+        cout <<"Masukan Nama Tugas: ";
+        getline(cin, namaTugas);
 
-    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
+
+    
+    Tugas* tugasBaru = new Tugas{namaTugas, false, NULL};
+
+    if (grup->head == NULL) {
+        grup->head = tugasBaru;
+    } else {
+        Tugas* temp = grup->head;
+        while (temp->next != NULL)
+            temp = temp->next;
+        temp->next = tugasBaru;
+    }
+    cout << "Tugas berhasil ditambahkan ke grup \"" << namaGrup << "\".\n";
+    cout << "Ingin tambah tugas lagi? (y/n): ";
+    cin >> tambahLagi;
+    cin.ignore();
+    } while (tambahLagi == 'y' || tambahLagi == 'Y');
 }
 
-// Cari grup berdasarkan nama (menggunakan searching)
-ToDoGroup* searchGroup(string name) {
-    // Linear search dalam linked list grup
-
-    // cek kodingan kodingan kemaren, kodinganya pasti mirip, bedanya cuman di variabel sama pointernya
-    return nullptr;
+void tampilkanSemua() {
+    Grup* grup = headGroup;
+    while (grup != NULL) {
+        cout << "\n" << grup->namaGrup << " - " << grup->tanggal << ":\n";
+        Tugas* tugas = grup->head;
+        while (tugas != NULL) {
+            cout << (tugas->selesai ? "[v] " : "[ ] ") << tugas->namaTugas << endl;
+            tugas = tugas->next;
+        }
+        grup = grup->next;
+    }
+    cout << endl;
 }
 
-// =============================================================
+void checklistTugas(string namaGrup, string namaTugas) {
+    Grup* grup = cariGrup(namaGrup);
+    if (grup == NULL) return;
 
+    Tugas* tugas = grup->head;
+    while (tugas != NULL) {
+        if (tugas->namaTugas == namaTugas) {
+            tugas->selesai = true;
+            cout << "Tugas " << namaTugas << " selesai!\n";
+            return;
+        }
+        tugas = tugas->next;
+    }
+    cout << "Tugas tidak ditemukan.\n";
+}
+
+void urutkanTugas(string namaGrup) {
+    Grup* grup = cariGrup(namaGrup);
+    if (!grup || !grup->head) return;
+
+    bool tukar;
+    do {
+        tukar = false;
+        Tugas* sekarang = grup->head;
+        Tugas* sebelumnya = NULL;
+
+        while (sekarang->next != NULL) {
+            if (sekarang->namaTugas > sekarang->next->namaTugas) {
+                Tugas* tmp = sekarang->next;
+                sekarang->next = tmp->next;
+                tmp->next = sekarang;
+                if (sebelumnya == NULL)
+                    grup->head = tmp;
+                else
+                    sebelumnya->next = tmp;
+                tukar = true;
+                sebelumnya = tmp;
+            } else {
+                sebelumnya = sekarang;
+                sekarang = sekarang->next;
+            }
+        }
+    } while (tukar);
+    cout << "Tugas dalam grup \"" << namaGrup << "\" telah diurutkan.\n";
+}
+
+// ===== MENU UTAMA =====
 int main() {
-    int pilihanMenu;
-    string Name, date;
+    int pilihan;
+    string namaGrup, tanggal, namaTugas;
 
     do {
-        system("cls");
-        cout << "==============================================\n";
-        cout << "Menu To do list anda\n";
-        cout << "==============================================\n";
-        cout << "1. Menambah To Do List baru\n";
-        cout << "==============================================";
-        cout << "\nMasukkan pilihan anda : ";
-        cin >> pilihanMenu;
-        cout << endl;
 
-        switch (pilihanMenu) {
+        system("cls");
+        
+        cout << "\n========= MENU TO DO LIST =========\n";
+        cout << "1. Tambah Grup\n";
+        cout << "2. Tambah Tugas ke Grup\n";
+        cout << "3. Checklist Tugas\n";
+        cout << "4. Tampilkan Semua\n";
+        cout << "5. Urutkan Tugas dalam Grup\n";
+        cout << "6. Hapus Tugas dari Grup\n";
+        cout << "7. Hapus Grup\n";
+        cout << "0. Keluar\n";
+        cout << "\n====================================\n";
+        cout << "Pilih menu: ";
+        cin >> pilihan;
+        cin.ignore();
+
+        switch (pilihan) {
             case 1:
-                cout << "Masukkan Judul to do list anda : "; cin >> Name;
-                cout << "Masukkan Hari dan tanggal pada to do list anda : "; cin >> date;
-                addGroup(Name, date);
+                cout << "Masukkan nama grup: "; getline(cin, namaGrup);
+                cout << "Masukkan tanggal: "; getline(cin, tanggal);
+                tambahGrup(namaGrup, tanggal);
                 break;
             case 2:
+                tampilkanDaftarGrup();
+                tambahTugas(namaGrup, namaTugas);
                 break;
-
+            case 3:
+                #ifdef _WIN32
+                system("cls");
+                #else
+                system("clear");
+                #endif
+                tampilkanSemua();
+                cout << "Nama grup: "; getline(cin, namaGrup);
+                cout << "Nama tugas yang selesai: "; getline(cin, namaTugas);
+                checklistTugas(namaGrup, namaTugas);
+                break;
+            case 4:
+                tampilkanSemua();
+                break;
+            case 5:
+                tampilkanDaftarGrup();
+                cout << "Nama grup: "; getline(cin, namaGrup);
+                urutkanTugas(namaGrup);
+                break;
+            case 6:
+                tampilkanDaftarGrup();
+                cout << "Nama grup: "; getline(cin, namaGrup);
+                tampilkanDaftarTugasDalamGrup(namaGrup);
+                cout << "Nama tugas yang ingin dihapus: "; getline(cin, namaTugas);
+                hapusTugas(namaGrup, namaTugas);
+                break;
+            case 7:
+                tampilkanDaftarGrup();
+                cout << "Nama grup yang ingin dihapus: "; getline(cin, namaGrup);
+                hapusGrup(namaGrup);
+                break;
+            case 0:
+                cout << "Keluar...\n";
+                break;
             default:
-                cout << "Menu yang dipilih tidak terdaftar\n\n";
+                cout << "Pilihan tidak valid.\n";
                 break;
         }
 
-        system("pause"); 
-    } while (pilihanMenu != 2);
+        cout << "\nTekan Enter untuk melanjutkan...";
+        cin.get();
+
+    } while (pilihan != 0);
+
     return 0;
 }
-
-
-// Intinya, 2 struct diatas nanti hasil outputnya bakal keliatan kayak gini:
-
-/* List hari ini: tgl 17 juli 2025: <-- ini string di dalem grup ToDoGroup "List hari ini" groupName. "tgl 17 juli 2025" groupDate
-    [ ] Ngasih makan ikan 
-    [ ] Belajar
-    [ ] Ngerjain tugas
-    [ ] Tidur
-
-    [ ] <-- kotak ini pake bool done (bool done di dalem struct ToDoItem) atau artinya pake true false buat nanti user bisa ngechecklist kalo tugas ini kelar
-            klo semisal user nge-done tugas ini, nanti ouputnya [v] Ngasih makan ikan
-
-    Ngasih makan ikan <-- ini string task di dalem struct ToDoItem
-
-    Jadi disini ada 2 linked list, linked list buat grup dan nanti di dalem grup dikasih linked list tugas. Mangkanya ada 2 struct, 
-*/
