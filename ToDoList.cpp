@@ -282,6 +282,7 @@ int main() {
                 break;
             case 2:
                 tampilkanDaftarGrup();
+                cout <<"Masukan Nama Grup: ";
                 tambahTugas(namaGrup, namaTugas);
                 break;
             case 3:
