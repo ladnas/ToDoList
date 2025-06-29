@@ -18,7 +18,7 @@ struct Grup {
 };
 
 
-Grup* headGroup = NULL;
+Grup* headGroup = nullptr;
 Grup* queueArray[100];
 int front = -1, back = -1;
 
@@ -34,7 +34,7 @@ void enqueue(Grup* newGroup) {
 }
 
 Grup* dequeue() {
-    if (isQueueEmpty()) return NULL;
+    if (isQueueEmpty()) return nullptr;
     Grup* result = queueArray[front++];
     if (front > back) front = back = -1;
     return result;
@@ -42,12 +42,12 @@ Grup* dequeue() {
 
 
 bool isEmpty() {
-    return headGroup == NULL;
+    return headGroup == nullptr;
 }
 
 Grup* cariGrup(string nama) {
     Grup* current = headGroup;
-    while (current != NULL) {
+    while (current != nullptr) {
         if (current->namaGrup == nama)
             return current;
         current = current->next;
@@ -58,7 +58,7 @@ Grup* cariGrup(string nama) {
 void tampilkanDaftarGrup() {
     Grup* current = headGroup;
     cout << "\nDaftar Grup Yang Ada:\n";
-    while (current != NULL) {
+    while (current != nullptr) {
         cout << "- " << current->namaGrup << endl;
         current = current->next;
     }
@@ -71,14 +71,14 @@ void tampilkanDaftarTugasDalamGrup(string namaGrup) {
 
     cout << "\nTugas di dalam grup '" << namaGrup << "':\n";
     Tugas* tugas = grup->head;
-    while (tugas != NULL) {
+    while (tugas != nullptr) {
         cout << (tugas->selesai ? "[v] " : "[ ] ") << tugas->namaTugas << endl;
         tugas = tugas->next;
     }
 }
 
 void hapusSemuaTugas(Tugas* head) {
-    while (head != NULL) {
+    while (head != nullptr) {
         Tugas* temp = head;
         head = head->next;
         delete temp;
@@ -87,21 +87,21 @@ void hapusSemuaTugas(Tugas* head) {
 
 void hapusGrup(string namaGrup) {
     Grup* current = headGroup;
-    Grup* previous = NULL;
+    Grup* previous = nullptr;
 
-    while (current != NULL && current->namaGrup != namaGrup) {
+    while (current != nullptr && current->namaGrup != namaGrup) {
         previous = current;
         current = current->next;
     }
 
-    if (current == NULL) {
+    if (current == nullptr) {
         cout << "Grup tidak ditemukan.\n";
         return;
     }
 
     hapusSemuaTugas(current->head);
 
-    if (previous == NULL) {
+    if (previous == nullptr) {
         headGroup = current->next;
     } else {
         previous->next = current->next;
@@ -113,25 +113,25 @@ void hapusGrup(string namaGrup) {
 
 void hapusTugas(string namaGrup, string namaTugas) {
     Grup* grup = cariGrup(namaGrup);
-    if (grup == NULL) {
+    if (grup == nullptr) {
         cout << "Grup tidak ditemukan.\n";
         return;
     }
 
     Tugas* current = grup->head;
-    Tugas* previous = NULL;
+    Tugas* previous = nullptr;
 
-    while (current != NULL && current->namaTugas != namaTugas) {
+    while (current != nullptr && current->namaTugas != namaTugas) {
         previous = current;
         current = current->next;
     }
 
-    if (current == NULL) {
+    if (current == nullptr) {
         cout << "Tugas tidak ditemukan.\n";
         return;
     }
 
-    if (previous == NULL) {
+    if (previous == nullptr) {
         grup->head = current->next;
     } else {
         previous->next = current->next;
@@ -145,14 +145,14 @@ void tambahGrup(string nama, string tanggal) {
     Grup* baru = new Grup;
     baru->namaGrup = nama;
     baru->tanggal = tanggal;
-    baru->head = NULL;
-    baru->next = NULL;
+    baru->head = nullptr;
+    baru->next = nullptr;
 
     if (isEmpty()) {
         headGroup = baru;
     } else {
         Grup* temp = headGroup;
-        while (temp->next != NULL)
+        while (temp->next != nullptr)
             temp = temp->next;
         temp->next = baru;
     }
@@ -162,7 +162,7 @@ void tambahGrup(string nama, string tanggal) {
 
 void tambahTugas(string namaGrup, string namaTugas) {
     Grup* grup = cariGrup(namaGrup);
-    if (grup == NULL) {
+    if (grup == nullptr) {
         cout << "Grup tidak ditemukan.\n";
         return;
     }
@@ -174,13 +174,13 @@ void tambahTugas(string namaGrup, string namaTugas) {
 
 
     
-    Tugas* tugasBaru = new Tugas{namaTugas, false, NULL};
+    Tugas* tugasBaru = new Tugas{namaTugas, false, nullptr};
 
-    if (grup->head == NULL) {
+    if (grup->head == nullptr) {
         grup->head = tugasBaru;
     } else {
         Tugas* temp = grup->head;
-        while (temp->next != NULL)
+        while (temp->next != nullptr)
             temp = temp->next;
         temp->next = tugasBaru;
     }
@@ -193,10 +193,10 @@ void tambahTugas(string namaGrup, string namaTugas) {
 
 void tampilkanSemua() {
     Grup* grup = headGroup;
-    while (grup != NULL) {
+    while (grup != nullptr) {
         cout << "\n" << grup->namaGrup << " - " << grup->tanggal << ":\n";
         Tugas* tugas = grup->head;
-        while (tugas != NULL) {
+        while (tugas != nullptr) {
             cout << (tugas->selesai ? "[v] " : "[ ] ") << tugas->namaTugas << endl;
             tugas = tugas->next;
         }
@@ -207,10 +207,10 @@ void tampilkanSemua() {
 
 void checklistTugas(string namaGrup, string namaTugas) {
     Grup* grup = cariGrup(namaGrup);
-    if (grup == NULL) return;
+    if (grup == nullptr) return;
 
     Tugas* tugas = grup->head;
-    while (tugas != NULL) {
+    while (tugas != nullptr) {
         if (tugas->namaTugas == namaTugas) {
             tugas->selesai = true;
             cout << "Tugas " << namaTugas << " selesai!\n";
@@ -229,14 +229,14 @@ void urutkanTugas(string namaGrup) {
     do {
         tukar = false;
         Tugas* sekarang = grup->head;
-        Tugas* sebelumnya = NULL;
+        Tugas* sebelumnya = nullptr;
 
-        while (sekarang->next != NULL) {
+        while (sekarang->next != nullptr) {
             if (sekarang->namaTugas > sekarang->next->namaTugas) {
                 Tugas* tmp = sekarang->next;
                 sekarang->next = tmp->next;
                 tmp->next = sekarang;
-                if (sebelumnya == NULL)
+                if (sebelumnya == nullptr)
                     grup->head = tmp;
                 else
                     sebelumnya->next = tmp;
