@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <stdlib.h>
 using namespace std;
@@ -210,12 +211,14 @@ void tambahTugas(string namaGrup, string namaTugas) {
 }
 
 
+
+
 void tampilkanSemua() {
     Grup* grup = headGroup;
-    while (grup != nullptr) {
+    while (grup != NULL) {
         cout << "\n" << grup->namaGrup << " - " << grup->tanggal << ":\n";
         Tugas* tugas = grup->head;
-        while (tugas != nullptr) {
+        while (tugas != NULL) {
             cout << (tugas->selesai ? "[v] " : "[ ] ") << tugas->namaTugas << endl;
             tugas = tugas->next;
         }
