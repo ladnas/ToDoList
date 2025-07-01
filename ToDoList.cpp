@@ -164,36 +164,51 @@ void tambahGrup(string nama, string tanggal) {
     cout << "\nGrup berhasil ditambahkan.\n";
 }
 
+bool tugasSudahAda(Grup* grup, string namaTugas) {
+    Tugas* current = grup->head;
+    while (current != nullptr) {
+        if (current->namaTugas == namaTugas)
+            return true;
+        current = current->next;
+    }
+    return false;
+}
+
 void tambahTugas(string namaGrup, string namaTugas) {
     Grup* grup = cariGrup(namaGrup);
     if (grup == nullptr) {
         cout << "Grup tidak ditemukan.\n";
         return;
     }
+
     char tambahLagi;
     do {
-        string namaTugas;
-        cout <<"Masukan Nama Tugas: ";
+        cout << "Masukkan Nama Tugas: ";
         getline(cin, namaTugas);
 
+        if (tugasSudahAda(grup, namaTugas)) {
+            cout << "Tugas \"" << namaTugas << "\" sudah ada dalam grup \"" << namaGrup << "\"silahkan gunakan nama lain ya."<< endl;
+        } else {
+            Tugas* tugasBaru = new Tugas{namaTugas, false, nullptr};
 
-    
-    Tugas* tugasBaru = new Tugas{namaTugas, false, nullptr};
+            if (grup->head == nullptr) {
+                grup->head = tugasBaru;
+            } else {
+                Tugas* temp = grup->head;
+                while (temp->next != nullptr)
+                    temp = temp->next;
+                temp->next = tugasBaru;
+            }
 
-    if (grup->head == nullptr) {
-        grup->head = tugasBaru;
-    } else {
-        Tugas* temp = grup->head;
-        while (temp->next != nullptr)
-            temp = temp->next;
-        temp->next = tugasBaru;
-    }
-    cout << "Tugas berhasil ditambahkan ke grup \"" << namaGrup << "\".\n";
-    cout << "Ingin tambah tugas lagi? (y/n): ";
-    cin >> tambahLagi;
-    cin.ignore();
+            cout << "Tugas berhasil ditambahkan ke grup \"" << namaGrup << "\".\n";
+        }
+
+        cout << "Ingin tambah tugas lagi? (y/n): ";
+        cin >> tambahLagi;
+        cin.ignore();
     } while (tambahLagi == 'y' || tambahLagi == 'Y');
 }
+
 
 void tampilkanSemua() {
     Grup* grup = headGroup;
@@ -261,20 +276,23 @@ int main() {
     string namaGrup, tanggal, namaTugas;
 
     do {
+        system("cls"); // Bersihkan layar (gunakan "clear" di Linux)
 
-        system("cls");
-        
-        cout << "\n========= MENU TO DO LIST =========\n";
-        cout << "1. Tambah Grup\n";
-        cout << "2. Tambah Tugas ke Grup\n";
-        cout << "3. Checklist Tugas\n";
-        cout << "4. Tampilkan Semua\n";
-        cout << "5. Urutkan Tugas dalam Grup\n";
-        cout << "6. Hapus Tugas dari Grup\n";
-        cout << "7. Hapus Grup\n";
-        cout << "8. Keluar\n";
-        cout << "\n====================================\n";
-        cout << "Pilih menu: ";
+        // Tampilan menu dengan garis ASCII
+        cout << "+----------------------------------------+" << endl;
+        cout << "|           MENU TO-DO LIST              |" << endl;
+        cout << "+----------------------------------------+" << endl;
+        cout << "| 1. Tambah Grup                         |" << endl;
+        cout << "| 2. Tambah Tugas ke Grup                |" << endl;
+        cout << "| 3. Checklist Tugas                     |" << endl;
+        cout << "| 4. Tampilkan Semua Tugas               |" << endl;
+        cout << "| 5. Urutkan Tugas dalam Grup            |" << endl;
+        cout << "| 6. Hapus Tugas                         |" << endl;
+        cout << "| 7. Hapus Grup                          |" << endl;
+        cout << "| 8. Keluar                              |" << endl;
+        cout << "+----------------------------------------+" << endl;
+
+        cout << "\nPilih menu: ";
         cin >> pilihan;
         cin.ignore();
 
