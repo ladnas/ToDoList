@@ -215,10 +215,10 @@ void tambahTugas(string namaGrup, string namaTugas) {
 
 void tampilkanSemua() {
     Grup* grup = headGroup;
-    while (grup != NULL) {
+    while (grup != nullptr) {
         cout << "\n" << grup->namaGrup << " - " << grup->tanggal << ":\n";
         Tugas* tugas = grup->head;
-        while (tugas != NULL) {
+        while (tugas != nullptr) {
             cout << (tugas->selesai ? "[v] " : "[ ] ") << tugas->namaTugas << endl;
             tugas = tugas->next;
         }
