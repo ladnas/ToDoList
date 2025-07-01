@@ -142,6 +142,10 @@ void hapusTugas(string namaGrup, string namaTugas) {
 }
 
 void tambahGrup(string nama, string tanggal) {
+    if (cariGrup(nama)!=nullptr){
+        cout << "\nGrup dengan nama \"" << nama <<"\" sudah ada, silahkan gunakan nama lain";
+        return;
+    }
     Grup* baru = new Grup;
     baru->namaGrup = nama;
     baru->tanggal = tanggal;
@@ -327,7 +331,7 @@ int main() {
         cout << "\nTekan Enter untuk melanjutkan...";
         cin.get();
 
-    } while (pilihan != 0);
+    } while (pilihan != 8);
 
     return 0;
 }
