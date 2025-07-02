@@ -73,7 +73,7 @@ void tampilkanDaftarTugasDalamGrup(string namaGrup) {
     cout << "\nTugas di dalam grup '" << namaGrup << "':\n";
     Tugas* tugas = grup->head;
     while (tugas != nullptr) {
-        cout << (tugas->selesai ? "[v] " : "[ ] ") << tugas->namaTugas << endl;
+        cout << (tugas->selesai ? "[✓] " : "[ ] ") << tugas->namaTugas << endl;
         tugas = tugas->next;
     }
 }
@@ -204,7 +204,7 @@ void tambahTugas(string namaGrup, string namaTugas) {
             cout << "Tugas berhasil ditambahkan ke grup \"" << namaGrup << "\".\n";
         }
 
-        cout << "Ingin tambah tugas lagi? (y/n): ";
+        cout << "Ingin tambah tugas lagi? (y/t): ";
         cin >> tambahLagi;
         cin.ignore();
     } while (tambahLagi == 'y' || tambahLagi == 'Y');
@@ -215,15 +215,39 @@ void tambahTugas(string namaGrup, string namaTugas) {
 
 void tampilkanSemua() {
     Grup* grup = headGroup;
+
+    if (!grup) {
+        cout << "\nBelum ada grup yang ditambahkan.\n";
+        return;
+    }
+
+    cout << "\n================ DAFTAR SEMUA TUGAS ================\n";
+
     while (grup != nullptr) {
-        cout << "\n" << grup->namaGrup << " - " << grup->tanggal << ":\n";
+        cout << "\nGrup : " << grup->namaGrup << " (" << grup->tanggal << ")\n";
+        cout << "+-----+------------------------------+-----------+\n";
+        cout << "| No  | Nama Tugas                   | Status |\n";
+        cout << "+-----+------------------------------+-----------+\n";
+
         Tugas* tugas = grup->head;
-        while (tugas != nullptr) {
-            cout << (tugas->selesai ? "[v] " : "[ ] ") << tugas->namaTugas << endl;
-            tugas = tugas->next;
+        int no = 1;
+
+        if (!tugas) {
+            cout << "|     (Tidak ada tugas)                        |\n";
         }
+
+        while (tugas != nullptr) {
+            cout << "| " << setw(3) << right << no << " ";
+            cout << "| " << left << setw(28) << tugas->namaTugas;
+            cout << "| " << (tugas->selesai ? "[✓]" : "[ ]") << "       |\n";
+            tugas = tugas->next;
+            no++;
+        }
+
+        cout << "+-----+------------------------------+-----------+\n";
         grup = grup->next;
     }
+
     cout << endl;
 }
 
@@ -273,6 +297,54 @@ void urutkanTugas(string namaGrup) {
     cout << "Tugas dalam grup \"" << namaGrup << "\" telah diurutkan.\n";
 }
 
+void urutkanChecklistKeAtas(string namaGrup) {
+    Grup* grup = cariGrup(namaGrup);
+    if (!grup || !grup->head) {
+        cout << "Grup tidak ditemukan atau belum ada tugas.\n";
+        return;
+    }
+
+    Tugas* headSelesai = nullptr;
+    Tugas* tailSelesai = nullptr;
+    Tugas* headBelum = nullptr;
+    Tugas* tailBelum = nullptr;
+
+    Tugas* current = grup->head;
+
+    while (current != nullptr) {
+        Tugas* next = current->next;
+        current->next = nullptr;
+
+        if (current->selesai) {
+            if (headSelesai == nullptr) {
+                headSelesai = tailSelesai = current;
+            } else {
+                tailSelesai->next = current;
+                tailSelesai = current;
+            }
+        } else {
+            if (headBelum == nullptr) {
+                headBelum = tailBelum = current;
+            } else {
+                tailBelum->next = current;
+                tailBelum = current;
+            }
+        }
+
+        current = next;
+    }
+
+    // Gabungkan selesai di atas, belum di bawah
+    if (headSelesai == nullptr) {
+        grup->head = headBelum;
+    } else {
+        grup->head = headSelesai;
+        tailSelesai->next = headBelum;
+    }
+
+    cout << "Tugas pada grup \"" << namaGrup << "\" telah diurutkan (checklist di atas).\n";
+}
+
 // ===== MENU UTAMA =====
 int main() {
     int pilihan;
@@ -292,7 +364,8 @@ int main() {
         cout << "| 5. Urutkan Tugas dalam Grup            |" << endl;
         cout << "| 6. Hapus Tugas                         |" << endl;
         cout << "| 7. Hapus Grup                          |" << endl;
-        cout << "| 8. Keluar                              |" << endl;
+        cout << "| 8. Urutkan yang sudah checklist        |" << endl;
+        cout << "| 9. Keluar                              |" << endl;
         cout << "+----------------------------------------+" << endl;
 
         cout << "\nPilih menu: ";
@@ -342,6 +415,11 @@ int main() {
                 hapusGrup(namaGrup);
                 break;
             case 8:
+                tampilkanDaftarGrup();
+                cout << "Nama grup: "; getline(cin, namaGrup);
+                urutkanChecklistKeAtas(namaGrup);
+                break;
+            case 9:
                 cout << "Keluar...\n";
                 break;
             default:
@@ -352,7 +430,7 @@ int main() {
         cout << "\nTekan Enter untuk melanjutkan...";
         cin.get();
 
-    } while (pilihan != 8);
+    } while (pilihan != 9);
 
     return 0;
 }
