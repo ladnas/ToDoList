@@ -73,7 +73,7 @@ void tampilkanDaftarTugasDalamGrup(string namaGrup) {
     cout << "\nTugas di dalam grup '" << namaGrup << "':\n";
     Tugas* tugas = grup->head;
     while (tugas != nullptr) {
-        cout << (tugas->selesai ? "[✓] " : "[ ] ") << tugas->namaTugas << endl;
+        cout << (tugas->selesai ? "[v] " : "[ ] ") << tugas->namaTugas << endl;
         tugas = tugas->next;
     }
 }
@@ -239,7 +239,7 @@ void tampilkanSemua() {
         while (tugas != nullptr) {
             cout << "| " << setw(3) << right << no << " ";
             cout << "| " << left << setw(28) << tugas->namaTugas;
-            cout << "| " << (tugas->selesai ? "[✓]" : "[ ]") << "       |\n";
+            cout << "| " << (tugas->selesai ? "[v]" : "[ ]") << "       |\n";
             tugas = tugas->next;
             no++;
         }
